@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Inicio | Sistema Xochimilco</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/mediaqueries.css') }}">
+	<link rel="shortcut icon" href="{{ url_for('static',filename='img/Ico_UNAM.png') }}">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Pontano+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark">
+			<div class="mr-auto">
+				<img src="{{ url_for('static',filename='img/Logo_UNAM.png') }}" alt="Logo UNAM">
+				<img src="{{ url_for('static',filename='img/Logo_Fi.png') }}" alt="Logo FI') }}">
+				<img src="{{ url_for('static',filename='img/Logo_FQ.png') }}" alt="Logo FQ') }}">
+			</div>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Inicio<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('historial') }}">Historial</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Estado del sistema
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="{{ url_for('estado') }}">General</a>
+							<a class="dropdown-item" href="{{ url_for('phs') }}">PH</a>
+							<a class="dropdown-item" href="{{ url_for('oxigenoD') }}">Oxígeno disuelto</a>
+							<a class="dropdown-item" href="{{ url_for('turbidez') }}">Turbidez</a>
+							<a class="dropdown-item" href="{{ url_for('flujoF') }}">Flujo</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+	<main>
+		<div class="jumbotron-index jumbotron text-center">
+		  <h1 class="display-4">Sistema de recirculación de aguas Xochimilco</h1>
+		  <h3 class="lead display-3 pt-3">Bienvenidos</h3>
+		  <hr class="my-4">
+		  <p>Si requieres controlar y dar seguimiento al sistema, por favor <a href="{{ url_for('login') }}">inicia sesión</a></p>
+		  <!-- <a class="btn btn-md" href="#" role="button">Iniciar Sesión</a> -->
+		</div>
+	</main>
+	<footer class="text-center pt-2 pt-md-2 pl-2 pr-2 pb-0">
+		<p>
+			Interfaz creada por el equipo Awuas™ de la Facultad de Ingenería de la UNAM en colaboración con la Facultad de Química de la UNAM<br>Abril 2020
+		</p>
+	</footer>
+</body>
+<script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+</html>

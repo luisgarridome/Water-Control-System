@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Estado | Sistema Xochimilco</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/mediaqueries.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/Ico_UNAM.png') }}">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Pontano+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=EB+Garamond&display=swap" rel="stylesheet">
+	<!-- POPO -->
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    	$(document).ready(function(){
+    	    var socket = io();
+    	    var flujo = 50;
+    	    var btnFlujoMas = document.getElementById("btnFlujoMas");
+    	    var btnFlujoMenos = document.getElementById("btnFlujoMenos");
+    	    var btnPurga = document.getElementById("btnPurga");
+    	    var btnParo = document.getElementById("btnParo");
+    	    var btnSoplador = document.getElementById("btnSoplador");
+    	    var btnOnOff = document.getElementById("btnOnOff");
+
+    	    socket.on('connect',function(){
+    	        socket.emit('eventoConexion');
+    	    });
+
+
+    	    btnPurga.addEventListener("click",function(){
+    	        socket.emit('eventoPurga');
+    	    });
+
+
+    	    btnFlujoMas.addEventListener("click",function(){
+    	        if (flujo < 100){
+    	            socket.emit('eventoMasFlujo');
+    	        }
+    	    }); 
+
+
+    	    btnFlujoMenos.addEventListener("click",function(){
+    	        if (flujo > 0){
+    	            socket.emit('eventoMenosFlujo');
+    	        }
+    	    });         
+
+
+    	    btnParo.addEventListener("click",function(){
+    	        socket.emit('eventoParo');  
+    	    });     
+
+
+    	    btnSoplador.addEventListener("click",function(){
+    	        socket.emit('eventoSoplador');
+    	    });         
+
+
+    	    btnOnOff.addEventListener("click",function(){
+    	        socket.emit('eventoOnOff');
+    	    });     
+
+
+    	    socket.on('eventoFlujoS',function(message){
+    	        flujo =  Number(message.flujo);
+    	        $('#lblFlujo').html(message.flujo);
+    	    });
+
+    	    socket.on('eventoEstadoS',function(message){
+    	        $('#lblEstado').html(message.estado);
+    	    })
+
+
+    	    google.charts.load('current', {'packages':['corechart']});
+    	    google.charts.setOnLoadCallback(drawChart);
+    	    var datosPH = [
+    	            ['i','PH'],
+    	            [0,0]
+    	            ];
+    	    var datosOX = [
+    	            ['i','Oxígeno'],
+    	            [0,0]
+    	            ];
+    	    var datosTUR = [
+    	            ['i','Turbidez'],
+    	            [0,0]
+    	            ];
+    	    function drawChart(){
+    	        var dataPH = google.visualization.arrayToDataTable(datosPH);
+    	        var dataOX = google.visualization.arrayToDataTable(datosOX);
+    	        var dataTUR = google.visualization.arrayToDataTable(datosTUR);
+    	        var optionsPH = {
+    	            title:'',
+    	            curveType:'function',
+    	            legend:{position:'none'},
+    	            colors:['green'],
+    	            hAxis:{textPosition:'none'}
+
+    	        };
+    	        var optionsOX = {
+    	            title:'',
+    	            curveType:'function',
+    	            legend:{position:'none'},
+    	            colors:['red'],
+    	            hAxis:{textPosition:'none'}
+    	        };
+    	        var optionsTUR = {
+    	            title:{position:'none'},
+    	            curveType:'function',
+    	            legend:{position:'none'},
+    	            colors:['blue'],
+    	            hAxis:{textPosition:'none'}
+    	        };
+    	        var chartPH = new google.visualization.LineChart(document.getElementById('grafPH'))
+    	        chartPH.draw(dataPH,optionsPH);
+    	        var chartOX = new google.visualization.LineChart(document.getElementById('grafOX'))
+    	        chartOX.draw(dataOX,optionsOX);
+    	        var chartTUR = new google.visualization.LineChart(document.getElementById('grafTUR'))
+    	        chartTUR.draw(dataTUR,optionsTUR);
+
+    	        socket.on('eventoDatosS',function(message){     
+    	            var dataPH = new google.visualization.DataTable(message.ph);
+    	            $('#valorPH').html(message.phD);
+    	            var dataOX = new google.visualization.DataTable(message.ox);
+    	            $('#valorOX').html(message.oxD);
+    	            var dataTUR = new google.visualization.DataTable(message.tur);
+    	            $('#valorTUR').html(message.turD);
+
+    	            chartPH.draw(dataPH,optionsPH);
+    	            chartOX.draw(dataOX,optionsOX);
+    	            chartTUR.draw(dataTUR,optionsTUR);
+
+    	        });
+    	    }
+
+    	}); 
+    </script>
+
+
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark">
+			<div class="mr-auto">
+				<img src="{{ url_for('static',filename='img/Logo_UNAM.png') }}" alt="Logo UNAM">
+                <img src="{{ url_for('static',filename='img/Logo_Fi.png') }}" alt="Logo FI') }}">
+                <img src="{{ url_for('static',filename='img/Logo_FQ.png') }}" alt="Logo FQ') }}">
+			</div>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('index') }}">Inicio</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('historial') }}">Historial</a>
+					</li>
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Estado del sistema<span class="sr-only">(current)</span>
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="#">General</a>
+							<a class="dropdown-item" href="{{ url_for('phs') }}">PH</a>
+							<a class="dropdown-item" href="{{ url_for('oxigenoD') }}">Oxígeno disuelto</a>
+							<a class="dropdown-item" href="{{ url_for('turbidez') }}">Turbidez</a>
+							<a class="dropdown-item" href="{{ url_for('flujoF') }}">Flujo</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+		<main>
+				<div class="jumbotron-index jumbotron text-center mb-2 pb-3">
+				  <h3 class="lead display-3 pt-3">Estado del sistema</h3>
+                  		  <h2 class="" id=lblEstado></h2>
+				</div>
+
+
+
+		<div class="container-fluid graficas  mb-2 pb-3">
+			<div class = "row">
+			<div class="columna_grafica col-12 col-lg-4">
+			  <p class="estado_sist text-center">Ph</p> 
+			<div class="" id=grafPH></div>
+			  <p class="estado_sist text-center" id=valorPH></p>
+			</div>
+			<div class="columna_grafica col-12 col-lg-4" >
+			  <p class="estado_sist text-center">Oxigeno disuelto</p>
+			<div class="" id=grafOX></div>
+			  <p class="estado_sist text-center" id=valorOX></p>
+			</div>
+			<div class="columna_grafica col-12 col-lg-4">
+			  <p class="estado_sist text-center">Turbidez</p>
+			  <div class="" id=grafTUR></div>
+			  <p class="estado_sist text-center" id=valorTUR></p>
+			</div>
+			</div>
+
+		</div>
+
+
+                
+                <div class="jumbotron-index jumbotron text-center pt-1 mt-0 pb-1 mb-0">
+                    <div class="p-3">
+                         <p class="estado_sist">Flujo actual: <label id=lblFlujo></label></p>
+                         <button class="btn btn-md p-2 m-1" id="btnFlujoMenos" value="-">-</button>
+                         <button class="btn btn-md p-2" id="btnFlujoMas" value="+">+</button>
+                    </div>
+                    <div class="p-3">
+                         <button class="btn btn-md bg-danger pl-4 pr-4 pt-3 pb-3" id="btnParo" value="PARO">PARO</button>
+                    </div>
+                    <div class="p-3">
+                        <button class="btn btn-md p-2 m-1" id="btnOnOff" value="ON/OFF">ON/OFF</button>
+                        <button class="btn btn-md p-2" id="btnPurga" value="PURGAR">PURGAR</button>
+                        <button class="btn btn-md p-2 m-1" id="btnSoplador" value="SOPLADOR">SOPLADOR</button>
+                    </div>
+                </div>
+		</main>
+	<footer class="text-center pt-2 pt-md-2 pl-2 pr-2 pb-0">
+		<p>
+			Interfaz creada por el equipo Awuas™ de la Facultad de Ingenería de la UNAM en colaboración con la Facultad de Química de la UNAM<br>Abril 2020
+		</p>
+	</footer>
+</body>
+<script src="{{ url_for('static',filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+</html>

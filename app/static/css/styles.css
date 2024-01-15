@@ -1,0 +1,105 @@
+html{
+	font-size: 1rem;
+}
+
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+
+
+nav, footer,.navbar-nav li div{
+	background-color: #10316b;
+}
+
+nav img{
+	width: 50px;
+	margin-right: 10px;
+}
+
+.navbar-toggler{
+	border-style: none;
+}
+
+.navbar-nav li a{
+	color:white !important;
+	font-family: 'Raleway', sans-serif;
+	font-size: .9rem;
+}
+
+.navbar-nav .active{
+	font-weight: bold;
+}
+
+.navbar-nav li a:hover{
+	text-decoration: underline;
+}
+
+footer{
+	color: white;
+}
+footer p{
+	font-size: 0.6rem;
+}
+.dropdown-item:hover{
+	background-color: white;
+	color:#10316b !important;
+}
+
+.jumbotron-index{
+	background-color: white;
+}
+
+.jumbotron-index h1{
+	font-family: 'EB Garamond', serif;
+	color: #10316b;
+	font-size: 2.5rem;
+}
+
+.jumbotron-index h3{
+
+	font-size: 2rem;
+	font-family: 'Raleway', sans-serif;
+}
+
+.jumbotron-index p{
+
+	font-size: 1.2rem;
+	font-family: 'Raleway', sans-serif;
+}
+
+.jumbotron-index .btn{
+	border: solid #10316b !important;
+	border-width: thin !important;
+	border-radius: 0;
+	background-color: #10316b;
+	color: white;
+}
+
+
+.chart{
+	width:100%
+	min-height:450px;
+}
+
+.estado_sist{
+    color: #142850;
+    font-size: 22px;
+}
+
+#grafPH{
+    
+}
+
+.btnLog{
+	border: solid #10316b !important;
+	border-width: thin !important;
+	border-radius: 0;
+	background-color: #10316b;
+	color: white;
+}
